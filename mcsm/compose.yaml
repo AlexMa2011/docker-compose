@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mcsm_web:
+    image: registry.cn-guangzhou.aliyuncs.com/kabaka/kabaka:mcsmv10_web
+    container_name: mcsm_web
+    env_file:
+      - .env
+    environment:
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${MCSM_DATA_PATH}/web:/opt/docker-mcsm/web/data
+      - ${MCSM_DATA_PATH}/web/logs:/opt/docker-mcsm/web/logs
+      - ${MCSM_DATA_PATH}/daemon/data/Config:/opt/docker-mcsm/daemon/data/Config:ro
+    ports:
+      - "${WEB_PORT}:23333"
+    restart: always
+
+  mcsm_daemon:
+    image: registry.cn-guangzhou.aliyuncs.com/kabaka/kabaka:mcsmv10_daemon
+    container_name: mcsm_daemon
+    env_file:
+      - .env
+    environment:
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${MCSM_DATA_PATH}/daemon/data:/opt/docker-mcsm/daemon/data
+      - ${MCSM_DATA_PATH}/daemon/logs:/opt/docker-mcsm/daemon/logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "${DAEMON_PORT}:24444"
+    restart: always

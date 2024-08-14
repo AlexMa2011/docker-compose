@@ -21,7 +21,7 @@ services:
       - ${EXTERNAL_LIBRARY_LOCATION}:/External_Library:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - .env
+      - stack.env
     ports:
       - 2283:3001
     depends_on:
@@ -31,15 +31,11 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
-    # 对于硬件加速，请将[-armnn、cuda、openvino]的其中一个添加到镜像标签中
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
-    # 例如：${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     volumes:
       - ${MODEL_CACHE_LOCATION}/model-cache:/cache
     env_file:
-      - .env
+      - stack.env
     restart: always
 
   redis:
